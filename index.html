@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruang Tumbuh — Ruang Edukasi, Refleksi, & Bantuan Kesehatan Mental</title>
+  <meta name="description" content="Platform web ramah pemuda untuk refleksi diri, literasi kesehatan mental, dan rujukan konseling yang aman, objektif, dan bebas stigma.">
+
+  <!-- Google Fonts: Plus Jakarta Sans for ultra-clean modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Clean Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200">
+
+  <!-- TOP UTILITY & CRISIS NOTICE BAR -->
+  <aside aria-label="Informasi Darurat" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 text-xs py-2 px-4 transition-colors">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-[11px] sm:text-xs">
+        <span class="inline-block w-2 h-2 rounded-full bg-teal-500"></span>
+        <span>Ruang Tumbuh — Platform Edukasi, Pengelolaan Diri, & Bantuan Non-Stigma</span>
+      </div>
+
+      <div class="flex items-center gap-4 text-[11px] sm:text-xs">
+        <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-medium">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          <span>Krisis Jiwa?</span>
+          <a href="#krisis" onclick="openEmergencyModal()" class="font-bold underline hover:text-rose-700">
+            Hotline 119 Ext. 8
+          </a>
+        </div>
+
+        <!-- Controls: Font Size & Theme -->
+        <div class="flex items-center gap-1.5 pl-3 border-l border-slate-200 dark:border-slate-800 text-slate-500">
+          <button onclick="changeFontSize('small')" id="font-btn-sm" class="px-1.5 py-0.5 hover:text-slate-900 dark:hover:text-white" title="Teks Lebih Kecil">A-</button>
+          <button onclick="changeFontSize('normal')" id="font-btn-md" class="px-1.5 py-0.5 font-bold text-teal-600 dark:text-teal-400" title="Teks Normal">A</button>
+          <button onclick="changeFontSize('large')" id="font-btn-lg" class="px-1.5 py-0.5 hover:text-slate-900 dark:hover:text-white" title="Teks Lebih Besar">A+</button>
+          
+          <button onclick="toggleDarkMode()" class="ml-1.5 p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" title="Ganti Tema">
+            <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
+            <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CLEAN MAIN HEADER & NAVIGATION -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Brand Logo -->
+        <a href="#beranda" onclick="switchTab('beranda')" class="flex items-center gap-2.5 focus:outline-none">
+          <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
+            <i data-lucide="sprout" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-none">
+              Ruang Tumbuh
+            </div>
+            <div class="text-[10px] sm:text-[11px] text-slate-400 font-medium mt-0.5">
+              Belajar, Memahami, & Merawat Diri
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation (NO NUMBERS, CLEAN PILL BUTTONS) -->
+        <nav class="hidden md:flex items-center space-x-1 text-xs lg:text-sm font-medium">
+          <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-tab-btn px-3.5 py-2">
+            Beranda
+          </button>
+          <button onclick="switchTab('refleksi')" id="nav-refleksi" class="nav-tab-btn px-3.5 py-2">
+            Kenali Dirimu
+          </button>
+          <button onclick="switchTab('edukasi')" id="nav-edukasi" class="nav-tab-btn px-3.5 py-2">
+            Pusat Edukasi
+          </button>
+          <button onclick="switchTab('bertumbuh')" id="nav-bertumbuh" class="nav-tab-btn px-3.5 py-2">
+            Ruang Bertumbuh
+          </button>
+          <button onclick="switchTab('konseling')" id="nav-konseling" class="nav-tab-btn px-3.5 py-2">
+            Ruang Konseling
+          </button>
+          <button onclick="switchTab('tentang')" id="nav-tentang" class="nav-tab-btn px-3.5 py-2">
+            Tentang Kami
+          </button>
+        </nav>
+
+        <!-- CTA Action -->
+        <div class="hidden md:flex items-center">
+          <button onclick="switchTab('refleksi')" class="px-4 py-2 rounded-full bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs shadow-sm shadow-teal-500/20 transition-all">
+            Mulai Refleksi
+          </button>
+        </div>
+
+        <!-- Mobile Trigger -->
+        <div class="md:hidden flex items-center">
+          <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Buka navigasi">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 px-4 py-3 space-y-1 text-sm font-medium">
+      <button onclick="switchTab('beranda'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Beranda</button>
+      <button onclick="switchTab('refleksi'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Kenali Dirimu</button>
+      <button onclick="switchTab('edukasi'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Pusat Edukasi</button>
+      <button onclick="switchTab('bertumbuh'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Ruang Bertumbuh</button>
+      <button onclick="switchTab('konseling'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Ruang Konseling</button>
+      <button onclick="switchTab('tentang'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-200">Tentang Kami</button>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10" id="app-content">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: BERANDA (HOME)                                          -->
+    <!-- ============================================================== -->
+    <section id="tab-beranda" class="tab-pane space-y-14">
+      
+      <!-- HERO SECTION: Clean, bright, airy, modern -->
+      <div class="py-6 sm:py-12 text-center max-w-3xl mx-auto space-y-6">
+        
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 dark:bg-teal-950/60 border border-teal-100 dark:border-teal-900 text-teal-700 dark:text-teal-300 text-xs font-semibold">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>100% Anonim • Tanpa Penghakiman • Berbasis Bukti Ilmiah</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight sm:leading-tight">
+          Ruang aman untuk memahami diri, mengelola stres, dan menemukan dukungan.
+        </h1>
+
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto">
+          Tempat belajar seputar kesehatan mental, relasi sehat, dan literasi diri tanpa prasangka buruk. Hadir untuk menemani proses bertumbuhmu dengan bahasa yang santun, adil, dan bermartabat.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button onclick="switchTab('refleksi')" class="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-teal-600/20 transition-all flex items-center gap-2">
+            <i data-lucide="compass" class="w-4 h-4"></i> Mulai Refleksi Singkat
+          </button>
+          <button onclick="switchTab('edukasi')" class="px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-semibold text-xs sm:text-sm transition-all flex items-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Jelajahi Edukasi
+          </button>
+          <button onclick="switchTab('konseling')" class="px-6 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-all flex items-center gap-2">
+            <i data-lucide="heart-handshake" class="w-4 h-4 text-rose-500"></i> Pilihan Dukungan
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 4 MAIN FEATURE CARDS (Clean White Wellness Grid) -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Fitur Pendukung</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pilih bagian yang paling kamu butuhkan hari ini</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Card 1 -->
+          <div onclick="switchTab('refleksi')" class="wellness-card p-6 rounded-2xl cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 transition-colors">Kenali Dirimu</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Refleksi mandiri bertahap untuk mengenali kebutuhan batinmu dan menemukan panduan belajar yang tepat.
+              </p>
+            </div>
+            <div class="pt-4 text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1">
+              Buka Refleksi <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div onclick="switchTab('edukasi')" class="wellness-card p-6 rounded-2xl cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors">Pusat Edukasi</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Artikel ilmiah terstruktur mengenai kesehatan jiwa, relasi sehat, batasan diri, dan literasi digital.
+              </p>
+            </div>
+            <div class="pt-4 text-xs font-bold text-sky-600 dark:text-sky-400 flex items-center gap-1">
+              Baca Artikel <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div onclick="switchTab('bertumbuh')" class="wellness-card p-6 rounded-2xl cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 transition-colors">Ruang Bertumbuh</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Latihan pernapasan 4-7-8 interaktif untuk meredakan cemas dan panduan kebiasaan sehat harian.
+              </p>
+            </div>
+            <div class="pt-4 text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+              Coba Latihan Napas <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div onclick="switchTab('konseling')" class="wellness-card p-6 rounded-2xl cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
+                <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-600 transition-colors">Ruang Konseling</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Pemahaman opsi pendampingan profesional, formulir simulasi, dan kontak bantuan krisis resmi.
+              </p>
+            </div>
+            <div class="pt-4 text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
+              Lihat Pilihan Dukungan <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PRINSIP KOMUNIKASI & ETIKA (Sleek, Modern, Non-Religious Aesthetic) -->
+      <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 bg-slate-50/50 dark:bg-slate-900/40 space-y-6">
+        <div>
+          <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Landasan Nilai & Etika</span>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mt-1">
+            Prinsip Komunikasi Humanis (Refleksi Filosofis QS. An-Nahl: 125)
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Platform mengadaptasi nilai etika komunikasi universal untuk menciptakan ruang digital yang aman dan menyejukkan bagi semua orang:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold text-xs">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Kebijaksanaan (Hikmah)
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Materi disajikan berdasarkan bukti ilmiah kesehatan jiwa (WHO, APA), memahami situasi psikologis pemuda, dan bebas dari penghakiman prematur.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold text-xs">
+              <i data-lucide="heart" class="w-4 h-4"></i> Nasihat Santun (Mau'izhah Hasanah)
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Bahasa yang digunakan menumbuhkan rasa aman dan harapan. Menghargai privasi dan pantang mempermalukan seseorang di ruang terbuka.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold text-xs">
+              <i data-lucide="messages-square" class="w-4 h-4"></i> Dialog yang Terbuka (Mujadalah bil Ahsan)
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Membuka ruang berbicara yang setara, siap mendengarkan keluh kesah, serta menentang perundungan verbal dalam bentuk apapun.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ETHICAL SAFETY COMMITMENTS (Bab V Laporan) -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 font-bold text-xs text-slate-800 dark:text-slate-200">
+            <i data-lucide="lock" class="w-4 h-4 text-teal-600"></i>
+            <span>Privasi Penuh & Tanpa Terapi Paksa</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Platform tidak mengumpulkan identitas asli dan menolak keras segala bentuk terapi konversi atau pemaksaan yang membahayakan psikologis.
+          </p>
+        </div>
+        <button onclick="switchTab('tentang')" class="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline shrink-0">
+          Pelajari Etika Platform →
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: KENALI DIRIMU (REFLEKSI KEBUTUHAN)                     -->
+    <!-- ============================================================== -->
+    <section id="tab-refleksi" class="tab-pane hidden space-y-8 max-w-2xl mx-auto">
+      
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Refleksi Kebutuhan</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Kenali Kebutuhan Dirimu</h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+          Refleksi sukarela untuk membantu memetakan hal yang sedang kamu rasakan. <em>Bukan tes diagnosis klinis atau penentu label identitas</em>.
+        </p>
+      </div>
+
+      <!-- Questionnaire Sheet -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+        
+        <!-- Progress bar -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span id="quiz-step-indicator">Langkah 1 dari 3</span>
+            <span id="quiz-percentage" class="text-teal-600 dark:text-teal-400 font-bold">33%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div id="quiz-progress-bar" class="h-full bg-teal-500 rounded-full transition-all duration-300 w-1/3"></div>
+          </div>
+        </div>
+
+        <!-- Question View Box -->
+        <div id="quiz-question-container" class="space-y-4">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Result Box (Hidden initially) -->
+        <div id="quiz-result-container" class="hidden space-y-4">
+          <div class="p-5 bg-teal-50/70 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900 rounded-xl space-y-2">
+            <div class="flex items-center gap-2 text-xs font-bold text-teal-800 dark:text-teal-300">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Rekomendasi Langkah Untukmu</span>
+            </div>
+            <p id="quiz-result-text" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+          </div>
+
+          <div id="quiz-result-actions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <!-- Dynamic Buttons -->
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <button onclick="resetQuiz()" class="text-xs text-slate-500 hover:text-teal-600 flex items-center gap-1">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Ulangi Refleksi
+            </button>
+            <span class="text-[11px] text-slate-400">Hasil ini hanya panduan navigasi pribadi</span>
+          </div>
+        </div>
+
+        <!-- Journaling Box -->
+        <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="user-journal" class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-teal-600"></i>
+              Catatan Batin Pribadi (Opsional)
+            </label>
+            <span id="journal-status" class="text-[11px] text-teal-600 hidden">Tersimpan otomatis</span>
+          </div>
+          <textarea id="user-journal" rows="3" placeholder="Tuliskan apa yang ada di pikiranmu dengan bebas... Catatan ini hanya tersimpan di peramban lokal perangkatmu." class="w-full text-xs sm:text-sm p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 dark:text-slate-200"></textarea>
+          <div class="flex justify-end">
+            <button onclick="clearJournal()" class="text-[11px] text-slate-400 hover:text-rose-500">Bersihkan Catatan</button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: PUSAT EDUKASI (ARTIKEL)                                 -->
+    <!-- ============================================================== -->
+    <section id="tab-edukasi" class="tab-pane hidden space-y-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Literasi & Kajian</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Pusat Edukasi</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Artikel ringkas berbasis rujukan resmi WHO, APA, dan etika relasi yang sehat.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="w-full md:w-72 relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+          <input type="text" id="article-search" placeholder="Cari topik atau kata kunci..." oninput="handleArticleSearch()" class="w-full text-xs sm:text-sm pl-9 pr-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 dark:text-slate-200">
+        </div>
+      </div>
+
+      <!-- Categories Filter Tabs -->
+      <div class="flex flex-wrap items-center gap-1.5 border-b border-slate-100 dark:border-slate-800 pb-3" id="article-categories">
+        <button onclick="filterCategory('all')" class="cat-pill active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 text-white shadow-sm" data-category="all">
+          Semua Topik
+        </button>
+        <button onclick="filterCategory('dasar')" class="cat-pill px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900" data-category="dasar">
+          Konsep & Sains
+        </button>
+        <button onclick="filterCategory('islam')" class="cat-pill px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900" data-category="islam">
+          Adab & Etika Sosial
+        </button>
+        <button onclick="filterCategory('mental')" class="cat-pill px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900" data-category="mental">
+          Kesehatan Mental
+        </button>
+        <button onclick="filterCategory('relasi')" class="cat-pill px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900" data-category="relasi">
+          Relasi Sehat & Batasan
+        </button>
+        <button onclick="filterCategory('digital')" class="cat-pill px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900" data-category="digital">
+          Keamanan Digital
+        </button>
+      </div>
+
+      <!-- Articles Grid -->
+      <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="articles-empty" class="hidden text-center py-12 space-y-2">
+        <p class="text-sm text-slate-500">Tidak ada artikel yang sesuai dengan pencarian tersebut.</p>
+        <button onclick="resetArticleFilter()" class="text-xs text-teal-600 font-bold hover:underline">Tampilkan Semua Artikel</button>
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: RUANG BERTUMBUH (LATIHAN NAPAS & 7 HARI)               -->
+    <!-- ============================================================== -->
+    <section id="tab-bertumbuh" class="tab-pane hidden space-y-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Perawatan Diri</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Ruang Bertumbuh</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Langkah harian sederhana untuk regulasi emosi, kebiasaan sehat, dan ketenangan batin.</p>
+        </div>
+
+        <!-- Weekly Progress Pill -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl flex items-center gap-3">
+          <div>
+            <div class="text-[10px] uppercase font-bold text-slate-400">Target Mingguan</div>
+            <div class="text-xs font-bold text-teal-600 dark:text-teal-400" id="growth-count">0/7 Hari Selesai</div>
+          </div>
+          <button onclick="resetGrowthProgress()" class="text-slate-400 hover:text-rose-500 p-1" title="Ulangi dari awal">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- SOOTHING BREATHING WIDGET (Minimalist & Soothing) -->
+      <div class="rounded-2xl border border-teal-100 dark:border-teal-950 bg-teal-50/50 dark:bg-teal-950/20 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-3 max-w-lg">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-300 text-xs font-semibold shadow-sm">
+            <i data-lucide="wind" class="w-3.5 h-3.5"></i> Latihan Napas Sadar (Teknik 4-7-8)
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            Tenangkan Sistem Saraf Tubuh
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+            Saat pikiran merasa cemas atau tertekan, detak jantung meningkat. Luangkan 2 menit mengikuti ritme visual di samping: <em>Tarik napas 4 detik, Tahan 7 detik, dan Hembuskan perlahan 8 detik</em>.
+          </p>
+          <div class="flex items-center gap-4 pt-1">
+            <button id="breathing-toggle-btn" onclick="toggleBreathingGuide()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-2">
+              <i data-lucide="play" id="breathing-btn-icon" class="w-3.5 h-3.5"></i>
+              <span id="breathing-btn-text">Mulai Latihan</span>
+            </button>
+            <span id="breathing-phase" class="text-xs font-medium text-teal-800 dark:text-teal-300">Siap untuk memulai...</span>
+          </div>
+        </div>
+
+        <!-- Breathing Visual Circle -->
+        <div class="flex items-center justify-center p-2">
+          <div class="w-36 h-36 rounded-full border-2 border-teal-200 dark:border-teal-800 flex items-center justify-center relative">
+            <div id="breathing-zen-circle" class="w-20 h-20 rounded-full bg-white dark:bg-slate-900 border border-teal-500 flex items-center justify-center text-center text-xs font-bold text-teal-700 dark:text-teal-300 shadow-md">
+              Napas
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Days Step-by-Step List -->
+      <div class="space-y-3" id="growth-journey-list">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: RUANG KONSELING (PILIHAN DUKUNGAN)                      -->
+    <!-- ============================================================== -->
+    <section id="tab-konseling" class="tab-pane hidden space-y-10">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Pilihan Bantuan</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Pahami Pilihan Dukunganmu</h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Ketahui perbedaan ranah konseling psikologi klinis dan konsultasi bimbingan agar kamu mendapatkan pendampingan yang tepat dan aman.
+        </p>
+      </div>
+
+      <!-- 3 Models Comparison Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Track 1: Psikologis -->
+        <div class="wellness-card p-6 rounded-2xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+              <i data-lucide="brain" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">1. Konseling Psikologis</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Dipandu oleh <strong>Psikolog Klinis berizin (HIMPSI)</strong>. Berfokus pada pengelolaan cemas, depresi, trauma perundungan, dan regulasi emosi dengan jaminan kerahasiaan medis.
+            </p>
+            <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 pt-2">
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Berbasis psikoterapi empiris</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Bebas diskriminasi latar belakang</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Fokus pemulihan fungsi diri</li>
+            </ul>
+          </div>
+          <div class="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="setSimulasiType('psikologi')" class="w-full py-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-xs font-bold hover:bg-blue-100 transition-colors">
+              Pilih Rujukan Psikolog
+            </button>
+          </div>
+        </div>
+
+        <!-- Track 2: Bimbingan Nilai / Konsultasi -->
+        <div class="wellness-card p-6 rounded-2xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
+              <i data-lucide="heart" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">2. Konsultasi Bimbingan Nilai</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Dipandu oleh <strong>Pembimbing yang santun, arif, dan berwawasan luas</strong>. Berfokus pada refleksi nilai kebajikan, adab hidup, serta ketenangan batin tanpa menghardik.
+            </p>
+            <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 pt-2">
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-500"></i> Bimbingan penuh empati</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-500"></i> Tanpa permaluan atau label moral</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-500"></i> Menghargai proses pribadi</li>
+            </ul>
+          </div>
+          <div class="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="setSimulasiType('keagamaan')" class="w-full py-2.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 text-xs font-bold hover:bg-teal-100 transition-colors">
+              Pilih Bimbingan Nilai
+            </button>
+          </div>
+        </div>
+
+        <!-- Track 3: Terpadu -->
+        <div class="wellness-card p-6 rounded-2xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">3. Pendampingan Terpadu</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Pilihan sinergis bagi mereka yang ingin memulihkan kestabilan mental sekaligus mendiskusikan bimbingan moralitas secara selaras tanpa benturan batin.
+            </p>
+            <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 pt-2">
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-500"></i> Sinergi kesehatan jiwa & nurani</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-500"></i> Batas wewenang transparan</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-500"></i> Menghindari konflik emosional</li>
+            </ul>
+          </div>
+          <div class="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="setSimulasiType('terpadu')" class="w-full py-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 text-xs font-bold hover:bg-purple-100 transition-colors">
+              Pilih Opsi Terpadu
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- INTAKE SIMULATION FORM -->
+      <div id="simulasi-form-card" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-2xl space-y-5 shadow-sm">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">
+              Simulasi Formulir Pendaftaran Pendampingan
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Uji coba alur antarmuka tanpa pengiriman atau penyimpanan data pribadi ke peladen</p>
+          </div>
+          <span class="text-[11px] font-semibold px-3 py-1 bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 rounded-full w-fit">
+            Simulasi Antarmuka
+          </span>
+        </div>
+
+        <form id="simulasi-counseling-form" onsubmit="handleSimulasiSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Jenis Layanan yang Dipilih</label>
+              <select id="simulasi-kategori" class="w-full text-xs sm:text-sm p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <option value="psikologi">Konseling Psikologis (Kesehatan Mental)</option>
+                <option value="keagamaan">Konsultasi Bimbingan Nilai (Adab & Karakter)</option>
+                <option value="terpadu">Pendampingan Terpadu (Sinergis)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Preferensi Metode Komunikasi</label>
+              <select id="simulasi-metode" class="w-full text-xs sm:text-sm p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <option value="chat">Pesan Teks Anonim Terenkripsi</option>
+                <option value="suara">Panggilan Suara / Audio Saja</option>
+                <option value="tatapmuka">Sesi Daring Tatap Muka</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Fokus Pokok Bahasan</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <label class="p-2.5 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <input type="checkbox" name="simulasi-fokus" value="Kecemasan & Stres" class="rounded text-teal-600"> Kecemasan / Stres
+              </label>
+              <label class="p-2.5 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <input type="checkbox" name="simulasi-fokus" value="Dilema Nilai & Batin" class="rounded text-teal-600"> Dilema Batin
+              </label>
+              <label class="p-2.5 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <input type="checkbox" name="simulasi-fokus" value="Relasi & Keluarga" class="rounded text-teal-600"> Relasi & Keluarga
+              </label>
+              <label class="p-2.5 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <input type="checkbox" name="simulasi-fokus" value="Perundungan / Trauma" class="rounded text-teal-600"> Korban Perundungan
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Catatan Tambahan (Opsional)</label>
+            <textarea id="simulasi-pesan" rows="3" placeholder="Tuliskan harapanmu terhadap sesi pendampingan..." class="w-full text-xs sm:text-sm p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+          </div>
+
+          <button type="submit" class="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm transition-colors flex items-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            Kirim Permintaan Simulasi
+          </button>
+        </form>
+
+        <div id="simulasi-result-box" class="hidden p-4 bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900 rounded-xl space-y-2 text-xs">
+          <strong class="text-teal-800 dark:text-teal-300 block font-bold flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Simulasi Diterima oleh Antarmuka Peramban
+          </strong>
+          <p id="simulasi-summary-text" class="text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+
+      </div>
+
+      <!-- OFFICIAL VERIFIED HOTLINES -->
+      <div id="krisis" class="bg-slate-900 text-white p-6 sm:p-8 rounded-2xl space-y-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Direktori Bantuan Resmi Terverifikasi</span>
+          <h3 class="text-xl sm:text-2xl font-bold mt-1 text-white">Butuh Pertolongan Segera di Dunia Nyata?</h3>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1">
+            Jika kamu atau seseorang di sekitarmu sedang mengalami krisis emosional berat atau bahaya melukai diri, hubungi lembaga resmi berikut yang beroperasi bebas biaya dan bebas stigma:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="p-4 bg-slate-800/90 border border-slate-700/80 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-white">Kemenkes RI — Hotline 119</span>
+              <span class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded font-bold">24 Jam</span>
+            </div>
+            <p class="text-xs text-slate-300">Konseling darurat krisis kejiwaan nasional resmi Kementerian Kesehatan.</p>
+            <a href="tel:119" class="text-xs font-bold text-teal-300 hover:underline inline-flex items-center gap-1 pt-1">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i> Telepon 119 (Ext. 8)
+            </a>
+          </div>
+
+          <div class="p-4 bg-slate-800/90 border border-slate-700/80 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-white">Yayasan Pulih</span>
+              <span class="text-[10px] bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-bold">Psikolog</span>
+            </div>
+            <p class="text-xs text-slate-300">Dukungan pemulihan trauma, perundungan, dan kekerasan emosional.</p>
+            <a href="https://wa.me/628118436633" target="_blank" class="text-xs font-bold text-teal-300 hover:underline inline-flex items-center gap-1 pt-1">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp: 0811-8436-633
+            </a>
+          </div>
+
+          <div class="p-4 bg-slate-800/90 border border-slate-700/80 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-white">Layanan SEJIWA (HIMPSI)</span>
+              <span class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded font-bold">Asosiasi</span>
+            </div>
+            <p class="text-xs text-slate-300">Dukungan psikososial terintegrasi KSP bersama Himpunan Psikologi Indonesia.</p>
+            <a href="tel:119" class="text-xs font-bold text-teal-300 hover:underline inline-flex items-center gap-1 pt-1">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i> Akses via Hotline 119
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 6: TENTANG KAMI (LANDASAN ILMIAH)                          -->
+    <!-- ============================================================== -->
+    <section id="tab-tentang" class="tab-pane hidden space-y-8 max-w-3xl mx-auto">
+      
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Dokumentasi Proyek</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Tentang Platform Ruang Tumbuh</h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Rancangan prototipe web pendukung Karya Tulis Ilmiah 2026.
+        </p>
+      </div>
+
+      <div class="space-y-5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+        
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="target" class="w-4 h-4 text-teal-600"></i>
+            1. Latar Belakang & Rasionalitas
+          </h3>
+          <p class="leading-relaxed">
+            Perkembangan teknologi informasi membuka peluang menyediakan edukasi kesehatan mental secara inklusif. Namun, topik terkait seksualitas dan identitas di kalangan generasi muda kerap dihadapi dengan stigma keras atau ujaran kebencian yang memperburuk kesehatan psikologis.
+          </p>
+          <p class="leading-relaxed">
+            Dalam naskah ilmiah ini, istilah <strong>"pencegahan"</strong> didefinisikan secara etis: berfokus pada <strong>pencegahan perundungan (bullying), stigma sosial, informasi palsu (misinformasi), relasi toksik, serta pencegahan keterlambatan mencari pertolongan profesional</strong> — bukan terapi konversi paksa yang dilarang oleh kode etik medis WHO/APA.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="heart-handshake" class="w-4 h-4 text-teal-600"></i>
+            2. Landasan Filosofis Komunikasi
+          </h3>
+          <p class="leading-relaxed">
+            Prinsip QS. An-Nahl ayat 125 diterjemahkan ke dalam pengalaman pengguna (*User Experience*):
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 leading-relaxed text-slate-600 dark:text-slate-400">
+            <li><strong>Al-Hikmah:</strong> Menyajikan data ilmiah berbasis bukti (WHO, APA, Kemenkes) dan bahasa yang bijaksana.</li>
+            <li><strong>Al-Mau'izhah Al-Hasanah:</strong> Penyampaian nasihat santun yang menumbuhkan harapan dan menjunjung martabat manusia.</li>
+            <li><strong>Mujadalah bil Ahsan:</strong> Menghadirkan ruang refleksi dan dialog yang aman tanpa intimidasi moralitas.</li>
+          </ul>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="book-marked" class="w-4 h-4 text-teal-600"></i>
+            3. Daftar Rujukan Awal
+          </h3>
+          <ul class="space-y-1.5 text-xs text-slate-500 dark:text-slate-400">
+            <li>• Al-Qur'an Surah An-Nahl [16]: 125 (Terjemahan Resmi Kementerian Agama RI).</li>
+            <li>• American Psychological Association (APA). (2020). Guidelines for Psychological Practice with Sexual Minority Persons.</li>
+            <li>• World Health Organization (WHO). (2022). World Mental Health Report: Transforming mental health for all.</li>
+            <li>• Meyer, I. H. (2003). Prejudice, Social Stress, and Mental Health. Psychological Bulletin.</li>
+            <li>• Pedoman Layanan Konseling Tanpa Stigma, Himpunan Psikologi Indonesia (HIMPSI).</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: PEMBACA ARTIKEL EDUKASI                                -->
+  <!-- ============================================================== -->
+  <div id="article-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4">
+        <div>
+          <span id="modal-category" class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 mb-1.5">
+            Kategori
+          </span>
+          <h3 id="modal-title" class="text-xl font-bold text-slate-900 dark:text-white leading-snug">
+            Judul Artikel
+          </h3>
+          <div class="flex items-center gap-3 text-xs text-slate-400 mt-1">
+            <span id="modal-date">Pembaruan: 2026</span>
+            <span>•</span>
+            <span id="modal-reviewer" class="text-teal-600 dark:text-teal-400 font-medium">Ditelaah oleh Tim Ahli</span>
+          </div>
+        </div>
+        <button onclick="closeArticleModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Tutup">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div id="modal-content" class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- References Box -->
+      <div class="bg-slate-50 dark:bg-slate-950 p-4 border-t border-slate-100 dark:border-slate-800 text-xs space-y-1.5">
+        <strong class="text-slate-800 dark:text-slate-200 block font-bold flex items-center gap-1.5">
+          <i data-lucide="library" class="w-3.5 h-3.5 text-teal-600"></i> Sumber Rujukan Resmi:
+        </strong>
+        <div id="modal-references" class="space-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <button onclick="openFeedbackModal(currentArticleTitle)" class="text-xs font-semibold text-slate-500 hover:text-teal-600 flex items-center gap-1.5">
+          <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Laporkan Masukan / Koreksi
+        </button>
+        <button onclick="closeArticleModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 transition-colors">
+          Selesai Membaca
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: DARURAT / KRISIS JIWA                                  -->
+  <!-- ============================================================== -->
+  <div id="emergency-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border-2 border-rose-500/60 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-600 flex items-center justify-center shrink-0">
+            <i data-lucide="phone-call" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pusat Tanggap Krisis Jiwa</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Bantuan nyata bebas biaya selalu tersedia.</p>
+          </div>
+        </div>
+        <button onclick="closeEmergencyModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <div class="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-950 dark:text-rose-200 text-xs leading-relaxed space-y-2">
+        <p><strong>Penting:</strong> Jika kamu merasa tidak aman atau memiliki dorongan melukai diri sendiri, jangan menanggungnya sendirian. Segera hubungi salah satu layanan resmi di bawah ini:</p>
+      </div>
+
+      <div class="space-y-3">
+        <a href="tel:119" class="block p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Layanan Jiwa Kemenkes 119 Ext. 8</span>
+            <span class="text-xs font-bold text-teal-600">Gratis 24 Jam</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Tekan 119 lalu pilih opsi 8 untuk konseling krisis kejiwaan langsung.</p>
+        </a>
+
+        <a href="https://wa.me/628118436633" target="_blank" class="block p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Yayasan Pulih (Konseling Psikologi)</span>
+            <span class="text-xs font-bold text-teal-600">WhatsApp</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Nomor WhatsApp: 0811-8436-633 (Senin-Jumat jam kerja).</p>
+        </a>
+      </div>
+
+      <button onclick="closeEmergencyModal()" class="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold">
+        Kembali ke Halaman
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: FORMULIR UMPAN BALIK EVALUASI                           -->
+  <!-- ============================================================== -->
+  <div id="feedback-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Kirimkan Koreksi / Masukan</h3>
+        <button onclick="closeFeedbackModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form onsubmit="handleFeedbackSubmit(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Topik Bahasan</label>
+          <input type="text" id="feedback-topic" class="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl" readonly>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Kategori Masukan</label>
+          <select id="feedback-type" class="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl">
+            <option>Bahasa dinilai berpotensi menyakiti / kurang santun</option>
+            <option>Ketidaktepatan sumber referensi ilmiah</option>
+            <option>Saran penambahan materi</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Anda</label>
+          <textarea id="feedback-message" rows="3" required placeholder="Tuliskan masukan atau klarifikasi..." class="w-full p-2.5 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-950"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-500 transition-colors">
+          Kirim Masukan
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-3 rounded-2xl text-xs font-semibold shadow-2xl flex items-center gap-2 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <i data-lucide="check" class="w-4 h-4 text-teal-400"></i>
+    <span id="toast-message">Pesan notifikasi</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-100 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-10 text-xs text-slate-500 mt-16 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
+      
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-teal-50 dark:bg-teal-950 text-teal-600 flex items-center justify-center font-bold">
+            <i data-lucide="sprout" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 dark:text-white">Ruang Tumbuh</div>
+            <div class="text-[11px] text-slate-400">Edukasi & Pendampingan Non-Stigma Berbasis IPTEK</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 text-xs">
+          <button onclick="switchTab('beranda')" class="hover:text-teal-600">Beranda</button>
+          <button onclick="switchTab('refleksi')" class="hover:text-teal-600">Kenali Dirimu</button>
+          <button onclick="switchTab('edukasi')" class="hover:text-teal-600">Pusat Edukasi</button>
+          <button onclick="switchTab('bertumbuh')" class="hover:text-teal-600">Ruang Bertumbuh</button>
+          <button onclick="switchTab('konseling')" class="hover:text-teal-600">Ruang Konseling</button>
+          <button onclick="switchTab('tentang')" class="hover:text-teal-600">Tentang Kami</button>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+        <p>© 2026 Ruang Tumbuh. Disusun dengan prinsip Non-Judgmental & Privacy by Design.</p>
+        <p>Bukan layanan darurat. Untuk situasi kritis segera hubungi 119 Ext. 8.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
